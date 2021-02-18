@@ -1,0 +1,113 @@
+
+```{r}
+data = read.csv("health_data.csv")
+head(data)
+```
+
+```{r}
+plot(data$Age, data$Systolic_blood_pressure,
+     main= "Systolic Blood Pressure vs Age",
+     xlab = "Age", ylab = "Systolic Blood Pressure")
+```
+
+```{r}
+cor(data$Age, data$Systolic_blood_pressure)
+```
+
+```{r}
+cor(data)
+```
+
+
+```{r}
+m = lm(data$Systolic_blood_pressure ~ data$Age)
+m
+```
+
+```{r}
+summary(m)
+```
+
+```{r}
+m1 = lm(data$Systolic_blood_pressure ~ data$Age + data$Weight)
+m1
+```
+
+```{r}
+summary(m1)
+```
+
+```{r}
+m2 = lm(data$Systolic_blood_pressure ~ data$Age + data$Weight+data$BMI)
+m2
+```
+
+```{r}
+summary(m2)
+```
+
+```{r}
+min(data$Age)
+```
+
+```{r}
+94.872+0.635*32
+```
+
+```{r}
+plot(data$Age, data$Systolic_blood_pressure,
+     main= "Systolic Blood Pressure vs Age",
+     xlab = "Age", ylab = "Systolic Blood Pressure")
+abline(m2, col="red")
+```
+
+Assessing the ft of the model
+```{r}
+mu_y = mean(data$Systolic_blood_pressure)
+fitted(m2)
+```
+
+```{r}
+R_squared1 = sum((fitted(m) - mean(data$Systolic_blood_pressure))**2) / sum((data$Systolic_blood_pressure - mean(data$Systolic_blood_pressure))**2)
+R_squared1
+```
+
+
+
+```{r}
+R_squared2 = sum((fitted(m1) - mean(data$Systolic_blood_pressure))**2) / sum((data$Systolic_blood_pressure - mean(data$Systolic_blood_pressure))**2)
+R_squared2
+```
+
+
+```{r}
+R_squared3 = sum((fitted(m2) - mean(data$Systolic_blood_pressure))**2) / sum((data$Systolic_blood_pressure - mean(data$Systolic_blood_pressure))**2)
+R_squared3
+```
+
+```{r}
+regSS = sum((fitted(m2) - mean(data$Systolic_blood_pressure))**2)
+resSS = sum((data$Systolic_blood_pressure - mean(data$Systolic_blood_pressure))**2)
+```
+
+```{r}
+regSS
+resSS
+```
+
+```{r}
+nrow(data)
+```
+
+```{r}
+qf(0.95, 3, 96)
+```
+
+```{r}
+qt(0.975, 96)
+```
+
+```{r}
+qt(0.975, 21)
+```
+
