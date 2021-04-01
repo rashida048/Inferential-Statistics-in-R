@@ -1,0 +1,143 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r}
+d = read.csv("iq_data.csv")
+head(d)
+```
+
+```{r}
+is.factor(d$group)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+library(plyr)
+```
+
+
+```{r}
+ddply(d, "group", summarise,
+               N    = length(iq),
+               mean = mean(iq),
+      median = median(iq),
+               sd   = sd(iq),
+      maximum = max(iq),
+      mimimum = min(iq))
+```
+
+```{r}
+ddply(d, "group", summarise,
+               N    = length(age),
+               mean = mean(age),
+      median = median(age),
+               sd   = sd(age),
+      maximum = max(age),
+      mimimum = min(age)
+      )
+```
+
+There are 15 students in each group. 
+
+```{r}
+boxplot(age~group, data = d, main = "age by group",
+        xlab = "Group",
+        ylab = "Age")
+```
+
+```{r}
+boxplot(iq~group, data = d, main = "IQ by group",
+        xlab = "Group",
+        ylab = "IQ")
+```
+
+Question 2
+As per the boxplot, it looks like that the test score varies. Specially chemistry students and physics students test scores look quiet different. Chemistry and math students also look different. Math and physics students test scores does not look to be that different. They look pretty close. 
+
+
+```{r}
+nrow(d)
+```
+
+```{r}
+qf(0.95, 2, 42)
+```
+
+```{r}
+m = aov(iq~group, data=d)
+m
+```
+
+```{r}
+summary(m)
+```
+
+```{r}
+TukeyHSD(m)
+```
+
+p-value for the difference in test scores of math and chemistry students is less than the alpha level. Also the p-value for physics and chemistry students are less than the alpha level 0.05. So, we can reject the null hypothesis for these two pairs. That means these two pairs have significant differences in means.
+
+
+
+Question 3
+
+```{r}
+d$g0<-ifelse(d$group == "Chemistry student", 1, 0)
+d$g1<-ifelse(d$group == "Math student", 1, 0)
+d$g2<-ifelse(d$group == "Physics student", 1, 0)
+```
+
+```{r}
+m2 = lm(iq~g1+g2, data = d)
+summary(m2)
+```
+
+F-statistic for both the tests are 26.57 and p-value is 3.5e-8. So, results are the same. 
+
+Here, intercept 46.267 is the mean of the reference group(chemistry students test scores).-8.667 is the difference in mean between the math students test scores and chemistry student test scores. It is negative because test scores of chemistry students is higher. The slope -12.133 is the difference in mean test scores of physics students and the chemistry students. 
+
+
+Question 4
+```{r}
+m3 = lm(iq~group+age, data=d)
+summary(m3)
+```
+
+Here, Chemistry is the reference group. So, intercept represents the mean for chemistry students. The interesting thing is, p-values for math to chemistry or physics to chemistry groups are bigger this time. So, they are not significant anymore. Instead age variable is significant. 
+The global p-value is very small, 1.078e-8. That tells us that at least one variable is significant in the model.
+
+```{r}
+m4 = lm(iq~group+age, data=d)
+```
+
+```{r}
+library(car)
+```
+
+
+```{r}
+Anova(m4, type=3)
+```
+
+In question 2, group variable was significant where p-value was 3.5e-08. It tested if at least one of the pair of student groups has significantly different mean iq. 
+In question 4, it checks the same thing when the age variable is controlled. 
+
+The result is different. In question two the model was significant. Now, age variable looks significant at the alpha value of 0.05. But the p-value for group becomes much larger. That means no pair of student groups have the mean difference in iq test score. 
+
+```{r}
+library(lsmeans)
+```
+
+
+```{r}
+lsmeans(m4, pairwise~group, adjust="tukey")
+```
+
+It shows when age variable is controlled the mean test scores of chemistry, Math, and Physics students are 38.6, 40.5, and 39.0 respectively. They are very close to each other. p-values are all large. When age variable is controlled difference in mean test scores are not significant anymore. That means age variable is linearly associated with the test scores. The group variable is not. 
