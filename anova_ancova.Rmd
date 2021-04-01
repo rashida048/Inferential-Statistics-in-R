@@ -1,0 +1,159 @@
+
+
+```{r}
+d = read.csv("nhanes_2015_2016.csv")
+head(d)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+colnames(d)
+```
+
+
+```{r}
+d %>% group_by(DMDEDUC2) %>% summarise(mean(BPXSY1))
+```
+
+
+```{r}
+m = group_by(d, DMDEDUC2) 
+summarise(m, Means = mean(BPXSY1))
+```
+
+```{r}
+head(mtcars)
+```
+
+```{r}
+mt = mtcars
+```
+
+```{r}
+names(mtcars)
+```
+
+
+```{r}
+mtcars %>% group_by(cyl) %>% summarise(mean(hp))
+```
+
+```{r}
+mtcars %>% group_by(cyl) %>% summarise(sd(hp))
+```
+
+```{r}
+mtcars %>% group_by(cyl) %>% summarise(var(hp))
+```
+
+```{r}
+nrow(mtcars)
+```
+
+
+```{r}
+mtcars %>% group_by(cyl) %>% summarise(n=n())
+```
+```{r}
+boxplot(hp~cyl, data = mtcars, main = "hp by cyl",
+        xlab = "cyl", ylab = "hp")
+```
+
+
+```{r}
+boxplot(mpg~cyl, data = mt, main = "mpg by cyl",
+        xlab = "cyl", ylab = "mpg")
+```
+
+```{r}
+mean(mtcars$hp)
+```
+
+```{r}
+#Mean Square Between
+(11*(82.64-146.69)**2 + 7*(122.29 - 146.69)**2 + 14*(209.21 - 146.69)**2)/2
+```
+
+```{r}
+#Mean Square Within
+((11-1)*438.25 + (7-1)*588.57 + (14-1)*2598.64)/(32-3)
+```
+```{r}
+52008.23/1437.801
+```
+
+
+```{r}
+qf(0.95, 2, 12)
+```
+
+```{r}
+qf(0.95, 2, 29)
+```
+head(mtcars)
+```{r}
+head(mtcars)
+```
+
+
+```{r}
+is.factor(mtcars$cyl)
+```
+
+```{r}
+mtcars$cyl = as.factor(mtcars$cyl)
+```
+
+
+```{r}
+m = aov(hp~cyl, data=mtcars)
+m
+```
+
+```{r}
+summary(m)
+```
+
+```{r}
+104031/2
+```
+
+```{r}
+41696/29
+```
+
+
+```{r}
+TukeyHSD(m)
+```
+
+```{r}
+pairwise.t.test(mtcars$hp, mtcars$cyl, p.adj = "bonferroni")
+```
+
+```{r}
+m2 = lm(hp~cyl+disp, data=mtcars)
+summary(m2)
+```
+
+```{r}
+library(car)
+```
+
+
+```{r}
+Anova(lm(hp~cyl+disp, data=mtcars), type=3)
+```
+
+```{r}
+library(lsmeans)
+```
+
+
+```{r}
+lsmeans(lm(hp~cyl+disp, data=mtcars), pairwise~cyl, adjust="tukey")
+```
+
