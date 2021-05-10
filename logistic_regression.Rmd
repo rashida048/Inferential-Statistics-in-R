@@ -1,0 +1,98 @@
+
+
+```{r}
+d = read.csv('Heart.csv')
+head(d)
+```
+
+```{r}
+d$ChestPain = as.integer(as.factor(d$ChestPain))
+```
+
+```{r}
+head(d)
+```
+
+
+```{r}
+head(d)
+```
+
+
+```{r}
+m = glm(d$AHD ~ d$Chol, family = binomial)
+m
+```
+
+```{r}
+exp(-0.9898 + 0.0033*220)/(1+exp(-0.9898 + 0.0033*220))
+```
+
+```{r}
+0.43/(1-0.43)
+```
+
+```{r}
+exp(-0.9898 + 0.0033*220)
+```
+
+```{r}
+exp(0.0033*(245-220))
+```
+
+
+```{r}
+summary(m)
+```
+
+```{r}
+summary(m)
+```
+
+
+```{r}
+m1 = glm(d$AHD ~ d$Chol + d$Sex, family = binomial)
+summary(m1)
+```
+
+```{r}
+m2 = glm(d$AHD ~ d$Chol + d$Sex + d$RestBP, family = binomial)
+summary(m2)
+```
+
+```{r}
+m2
+```
+
+
+```{r}
+m3 = glm(d$AHD ~ d$Chol + d$Sex + d$RestBP + d$ChestPain + d$MaxHR, family = binomial)
+summary(m3)
+```
+
+```{r}
+exp(-0.007*230+2.022*1+0.029*150-0.976*4-0.04*145)/(1+exp(-0.007*230+2.022*1+0.029*150-0.976*4-0.04*145))
+```
+
+
+```{r}
+m3
+```
+
+
+```{r}
+coef(m3)
+```
+
+```{r}
+confint(m3)
+```
+
+```{r}
+confint.default(m3)
+```
+
+```{r}
+exp(cbind(OR = coef(m3), confint.default(m3)))
+```
+
